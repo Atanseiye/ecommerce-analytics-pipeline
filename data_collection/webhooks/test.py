@@ -4,8 +4,9 @@ import json
 url = 'http://localhost:5000/webhook'
 headers = {'Content-Type': 'application/json'}
 data = {
-    "key1": "value1",
-    "key2": "value2"
+    "Name": "Kolade",
+    "Level": "500",
+    "Dept": "Computer Science"
 }
 
 try:
