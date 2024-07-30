@@ -17,7 +17,7 @@ def fetch_load_data(api_url, output_file):
         data = response.json()
 
         with open(output_file, 'w') as file:
-            json.dump(data, file, indent=4)
+            json.dumps(data, file, indent=4)
 
         return {'respose': f"Data successfully fetched and saved to {output_file}"}
 
