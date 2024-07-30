@@ -10,14 +10,14 @@ port = int(os.getenv('PORT', 5000))
 
 # Logging configuration
 log_file = os.getenv('LOG_FILE', 'webhook_listener.log')
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(log_file),
-        logging.StreamHandler()
-    ]
-)
+# logging.basicConfig(
+#     level=logging.INFO,
+#     format='%(asctime)s - %(levelname)s - %(message)s',
+#     handlers=[
+#         logging.FileHandler(log_file),
+#         logging.StreamHandler()
+#     ]
+# )
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -26,9 +26,15 @@ def webhook():
 
     if data:
         try:
+
+            filepath = 'webhook_data.json'
+            if not os.path.isfile(filepath):
+                with open(filepath, 'w') as file:
+                    file.write('')
+
             # Save the incoming data to a file or database
 
-            with open('webhook_data.json', 'a') as file:
+            with open(filepath, 'a') as file:
                 file.write(json.dumps(data) + '\n')
 
             logging.info("Data received and saved")
