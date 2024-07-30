@@ -37,13 +37,27 @@ def kafka_producer(topic, filepath, bootstrap_servers='localhost:9092'):
         with open(filepath, 'r') as file:
             for line in file:
                 try:
-                    data = 
-                transformed = trasformation(line)
+                    data = json.loads(line)
+                    transformed = trasformation(data)
 
-        pass
+                    # Optional: Use a key to ensure data is sent to the same partition
+                    key = str(randint(1, 10)).encode('utf-8')
 
-    except:
+                    # send the data through the producer client
+                    producer.send(topic, key=key, value=transformed)
+                    logging.info(f"Message sent: {transformed}")
+                    time.sleep(10)
+                except json.JSONDecodeError as json_err:
+                    logging.error(f"Error decoding JSON: {json_err}")
+                except KafkaError as kafka_err:
+                    logging.error(f"Kafka error: {kafka_err}") 
 
-        pass
+    except FileNotFoundError as not_found:
+        logging.error(f"File not Found: {not_found}")
+    except Exception as error:
+        logging.info(f"Unexpected error: {error}")
 
-    pass
+    finally:
+        producer.flush()
+        producer.close()
+        logging.info(f"Data from {filepath} successfully sent to Kafka topic {topic}")
