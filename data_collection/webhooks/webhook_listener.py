@@ -20,14 +20,14 @@ log_file = os.getenv('LOG_FILE', 'webhook_listener.log')
 # )
 
 @app.route('/webhook', methods=['POST'])
-def webhook():
+def webhook(data_path):
 
     data = request.json
 
     if data:
         try:
 
-            filepath = 'webhook_data.json'
+            filepath = data_path+'.json'
             if not os.path.isfile(filepath):
                 with open(filepath, 'w') as file:
                     file.write('')
@@ -50,4 +50,5 @@ def webhook():
 
 
 if '__main__' == __name__:
+    webhook('sales_data')
     app.run(port=port)
